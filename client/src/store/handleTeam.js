@@ -40,15 +40,16 @@ export const usehandleTeam = create((set) => ({
             console.error("Failed to handle request:", err.response?.data || err.message);
         }
     },
-    userDetails: async () => {
+    userDetails: async (id) => {
         
          
         try {
-            const res = await axios.get(
+            const res = await axios.post(
                 `http://localhost:8000/api/v1/user/send`,
+                {userId:id},
                 { withCredentials: true }
             );
-
+            console.log(res.data)
 
             set({ details: res.data });
             

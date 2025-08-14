@@ -2,6 +2,8 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { usehandleTeam } from "../store/handleTeam";
 import { User as UserIcon ,Pencil} from "lucide-react";
+import axios from "axios";
+import toast from "react-hot-toast";
 
 export const EditUserPage = () => {
   const { id } = useParams();
@@ -9,21 +11,38 @@ export const EditUserPage = () => {
   const [data, setData] = useState(null);
   const [currTeam, setCurrTeamName] = useState("");
   const [isEditingTeam, setIsEditingTeam] = useState(false);
+  console.log(id)
+
 
   const navigate = useNavigate();
+
+  const handleChangeTeam = async (selectedTeam) => {
+    console.log(id, selectedTeam);
+    const payload = await axios.put(
+      "http://localhost:8000/api/v1/team/changeTeam",
+      { id, teamName: selectedTeam },
+      { withCredentials: true }
+    );
+    
+
+    toast(payload.data.message);
+  };
 
   useEffect(() => {
     const fetchUser = async () => {
       const resData = await userDetails(id);
+      console.log(resData)
       setData(resData);
-      setCurrTeamName(resData.team || ""); // Sync dropdown with initial team
+      setCurrTeamName(resData.team || "");  
     };
     fetchUser();
-  }, [id, userDetails]);
+  }, [id, userDetails,currTeam]);
 
   if (!data) return <div>Loading...</div>;
+  
 
   const { user } = data;
+  console.log(user)
 
   return (
     <div className="w-full min-h-screen p-3">
@@ -65,6 +84,10 @@ export const EditUserPage = () => {
               >
                 Remove from Unnati
               </button>
+            </div>
+            <div>
+              <p>Classes: </p>
+              <h3>{user?.classes}</h3>
             </div>
           </div>
 
@@ -109,6 +132,7 @@ export const EditUserPage = () => {
                       const selectedTeam = e.target.value;
                       setCurrTeamName(selectedTeam);
                       setIsEditingTeam(false);
+                      handleChangeTeam(selectedTeam);
                     }}
                   >
                     <option value="" disabled>

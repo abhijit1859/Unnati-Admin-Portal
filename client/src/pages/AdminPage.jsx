@@ -34,10 +34,8 @@ export const AdminPage = () => {
       <div className="flex items-center gap-3 p-5">
         <ShieldUser className="w-10 h-10 text-green-500" />
         <h1 className="text-4xl font-bold">Admin Dashboard</h1>
-        <br /><br />
-        <button onClick={() => navigate("/attendance")}
-        className="bg-white border border-gray-300 shadow-lg  rounded-lg p-3 hover:bg-gray-200 transition-shadow"
-        >Mark Attendance</button>
+        <br />
+        <br />
       </div>
 
       <div className="flex gap-5 mt-5 items-center">
@@ -132,6 +130,7 @@ export const AdminPage = () => {
                 </div>
               ))}
           </div>
+          
         </div>
       </div>
     </div>

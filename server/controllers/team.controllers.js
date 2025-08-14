@@ -275,27 +275,46 @@ export const getAllUserDetails = async (req, res) => {
 
 
 
+ 
+
 export const changeMainTeam = async (req, res) => {
     const { id, teamName } = req.body;
+
     try {
+        
+         
+
+       
         await MainTeam.updateMany(
             { members: id },
-            {$pull:{members:id}}
-        )
+            { $pull: { members: id } }
+        );
+
+      
         const newTeam = await MainTeam.findOneAndUpdate(
             { name: teamName },
             { $addToSet: { members: id } },
-            {new:true}
-        )
+            { new: true }
+        );
 
-        res.status(201).json({
-            message: "team changed successfully",
-            team:newTeam.name
-        })
+        if (!newTeam) {
+            return res.status(404).json({ message: "Team not found" });
+        }
+
+     
+        
+        res.status(200).json({
+            message: "Team changed successfully :)",
+            team: newTeam.name,
+            
+        });
+
     } catch (error) {
-        console.log(error)
+        console.error(error);
+        res.status(500).json({ message: "Server error" });
     }
-}
+};
+
 
 
 export const getTeamInfo = async (req, res) => {

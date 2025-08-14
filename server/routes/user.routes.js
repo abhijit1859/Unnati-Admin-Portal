@@ -5,7 +5,7 @@ import { deleteUser, removeFromMainTeam, sendUserDetails } from '../controllers/
 
 const userRoutes = express.Router()
 
-userRoutes.get("/send",authMiddleware, sendUserDetails);
+userRoutes.post("/send",authMiddleware, sendUserDetails);
 userRoutes.post("/remove", authMiddleware, removeFromMainTeam)
 userRoutes.delete('/deleteUser/:id', authMiddleware, deleteUser)
 

@@ -31,8 +31,8 @@ export const getDetailsByTeamName = async (req, res) => {
 };
 
 export const sendUserDetails = async (req, res) => {
-    console.log(req.user)
-    const userId= req.user.userId;
+ 
+    const {userId}= req.body;
 
     try {
         
