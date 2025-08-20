@@ -27,7 +27,8 @@ export const UserPage = () => {
 
   useEffect(() => {
     const fetch = async () => {
-      const info = await userDetails();
+      const id = await authUser._id;
+      const info = await userDetails(id);
       setData(info);
       console.log("Details:", info);
     };
@@ -35,7 +36,6 @@ export const UserPage = () => {
   }, []);
   const navigate = useNavigate()
    
-
   return (
     <div className="w-full min-h-screen p-3">
       <h1 className="text-3xl font-bold m-4">Member Dashboard</h1>
@@ -91,42 +91,83 @@ export const UserPage = () => {
         </div>
 
         {/* Right 60% */}
-        <div className="w-[60%] flex flex-col">
-          <div className="border border-gray-300 rounded-lg p-6 space-y-6 shadow-sm bg-white h-full">
-            <h1 className="text-xl font-semibold text-green-400 text-center">
-              Join a Team
-            </h1>
+        <div className="w-full md:w-[60%] flex flex-col">
+          <div className="border border-gray-300 rounded-lg p-6 space-y-8 shadow-sm bg-white h-full">
+            {/* Join a Team */}
+            <div className="space-y-4">
+              <h1 className="text-xl font-semibold text-green-500 text-center">
+                Join a Team
+              </h1>
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                defaultValue=""
+                value={teamName}
+                onChange={(e) => setTeamName(e.target.value)}
+                disabled={requested}
+              >
+                <option value="" disabled>
+                  Select a team
+                </option>
+                <option value="DigiExplore">DigiExplore</option>
+                <option value="Netritva">Netritva</option>
+                <option value="Akshar">Akshar</option>
+              </select>
 
-            <select
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
-              defaultValue=""
-              value={teamName}
-              onChange={(e) => setTeamName(e.target.value)}
-              disabled={requested}
-            >
-              <option value="" disabled>
-                Select a team
-              </option>
-              <option value="DigiExplore">DigiExplore</option>
-              <option value="Netritva">Netritva</option>
-              <option value="Akshar">Akshar</option>
-            </select>
+              <button
+                onClick={handleRequest}
+                disabled={requested || loading || !teamName}
+                className={`px-4 py-2 text-white font-medium rounded-md w-full transition-all duration-200 ${
+                  requested || loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }`}
+              >
+                {loading
+                  ? "Sending Request..."
+                  : requested
+                  ? "Request Sent"
+                  : "Request to Join"}
+              </button>
+            </div>
 
-            <button
-              onClick={handleRequest}
-              disabled={requested || loading || !teamName}
-              className={`px-4 py-2 text-white rounded-md w-full transition ${
-                requested || loading
-                  ? "bg-gray-400 cursor-not-allowed"
-                  : "bg-blue-600 hover:bg-blue-700"
-              }`}
-            >
-              {loading
-                ? "Sending Request..."
-                : requested
-                ? "Request Sent"
-                : "Request to Join"}
-            </button>
+            {/* Join a Department */}
+            <div className="space-y-4">
+              <h1 className="text-xl font-semibold text-green-500 text-center">
+                Join a Department
+              </h1>
+              <select
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+                defaultValue=""
+              >
+                <option value="" disabled>
+                  Select a department
+                </option>
+                <option value="Technical">Technical</option>
+                <option value="PR & Fundraising">PR & Fundraising</option>
+                <option value="Design">Design</option>
+                <option value="Video Editing">Video Editing</option>
+                <option value="Content">Content</option>
+                <option value="Finance">Finance</option>
+                <option value="Membership and Coordinations">
+                  Membership and Coordinations
+                </option>
+                <option value="Social Media">Social Media</option>
+              </select>
+              <button
+                 
+                className={`px-4 py-2 text-white font-medium rounded-md w-full transition-all duration-200 ${
+                  requested || loading
+                    ? "bg-gray-400 cursor-not-allowed"
+                    : "bg-blue-600 hover:bg-blue-700"
+                }`}
+              >
+                {loading
+                  ? "Sending Request..."
+                  : requested
+                  ? "Request Sent"
+                  : "Request to Join"}
+              </button>
+            </div>
           </div>
         </div>
       </div>

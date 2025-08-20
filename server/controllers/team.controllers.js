@@ -13,7 +13,7 @@ export const joinTeam = async (req, res) => {
     try {
         const user = await User.findByIdAndUpdate(
             userId,
-            { associated_program: mainTeamName },  // ✅ FIXED
+            { associated_program: mainTeamName },   
             { new: true }
         );
 
