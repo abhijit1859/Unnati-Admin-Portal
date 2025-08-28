@@ -37,9 +37,6 @@ export const joinTeam = async (req, res) => {
     }
 };
 
-
-
-
 export const addSideTeam = async (req, res) => {
     const { name } = req.body;
     if (!name && name.trim() === "") {
@@ -113,21 +110,20 @@ export const joinSideTeam = async (req, res) => {
 };
 
 
- 
-
 const allowedTeams = ["Netritva", "DigiExplore", "Akshar"];
 
 export const requestToJoinTeam = async (req, res) => {
-    const { teamName } = req.body;
+
+    console.log(req.body)
+    const { teamName, teamType } = req.body;
+    
     const userId = req.user.userId;
 
     if (!teamName) {
         return res.status(400).json({ message: "teamName is required" });
     }
 
-    if (!allowedTeams.includes(teamName)) {
-        return res.status(400).json({ message: "Invalid team name" });
-    }
+    
 
     try {
         let team = await MainTeam.findOne({ name: teamName });
@@ -146,6 +142,8 @@ export const requestToJoinTeam = async (req, res) => {
                 leader: user._id,
                 batch: currentYear,
                 members: [user._id],
+                 
+
             });
 
             return res.status(201).json({
@@ -168,6 +166,8 @@ export const requestToJoinTeam = async (req, res) => {
         await joinRequest.create({
             requester: userId,
             team: team._id,
+            teamType:teamType
+            
         });
 
         res.status(201).json({
@@ -181,10 +181,10 @@ export const requestToJoinTeam = async (req, res) => {
     }
 };
 
-
 export const getJoinRequests = async (req, res) => {
+   
     const user = req.user;
-    
+ 
 
     try {
         let requests;
@@ -193,7 +193,7 @@ export const getJoinRequests = async (req, res) => {
             const team = await MainTeam.findOne({ leader: user._id });
             if (!team) return res.status(403).json({ message: "Not a team lead" });
 
-            requests = await joinRequest.find({ team: team._id, status: "pending" })
+            requests = await joinRequest.find({ team: team._id, status: "pending"  })
                 .populate("requester", "name email")
                 .populate("team", "name");
         } else if (user.role === "ADMIN") {
@@ -203,10 +203,11 @@ export const getJoinRequests = async (req, res) => {
         } else {
             return res.status(403).json({ message: "Unauthorized" });
         }
-        console.log(requests)
+     
 
         res.status(200).json(requests);
     } catch (err) {
+        console.log(err)
         res.status(500).json({ error: err.message });
     }
 };
@@ -246,9 +247,6 @@ export const handleJoinRequest = async (req, res) => {
     }
 }
 
-
-
-
 export const getAllUserDetails = async (req, res) => {
     const { userId } = req.params;
 
@@ -272,10 +270,6 @@ export const getAllUserDetails = async (req, res) => {
     }
 }
 
-
-
-
- 
 
 export const changeMainTeam = async (req, res) => {
     const { id, teamName } = req.body;
@@ -340,3 +334,17 @@ export const getTeamInfo = async (req, res) => {
         });
     }
 };
+
+
+export const getJoinReq = async (req, res) => {
+    const user = req.user;
+
+    try {
+        const pendingRequests = await joinRequest.find({ status: "pending" })
+            .populate("requester", "name email")
+            .populate("team","name")
+        res.status(201).json(pendingRequests)
+    } catch (error) {
+        console.log(error)
+    }
+}

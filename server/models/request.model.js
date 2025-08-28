@@ -7,13 +7,17 @@ const joinRequestSchema = new mongoose.Schema({
     },
     team: {
         type: mongoose.Schema.Types.ObjectId,
-        ref: "MainTeam",
+        refPath: "teamType",
     },
     status: {
         type: String,
         enum: ["pending", "accepted", "declined"],
         default: "pending",
     },
+    teamType: {
+        type: String,
+        required:true
+    }
 });
 
 export const joinRequest = mongoose.model("JoinRequest", joinRequestSchema);

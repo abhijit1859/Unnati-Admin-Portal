@@ -1,23 +1,19 @@
-import { create } from 'zustand';
-import axios from 'axios';
+import { create } from "zustand";
+import api from "../lib/axios";  
 
 export const useAttendanceStore = create((set) => ({
-    userDetailsForAttendance:[],
+    userDetailsForAttendance: [],
+
     fetchData: async (team, batch, centerName) => {
         try {
-            console.log(team)
-            console.log(batch)
-       
-            const res = await axios.post(
-                "http://localhost:8000/api/v1/attendance/fetchData",
-                { teamName:team, batchYear:Number(batch),centerName:centerName },
-                { withCredentials: true }
-            );
-            console.log(res.data)
-            set({userDetailsForAttendance:res.data.students})
-            console.log(res.data);
+            const res = await api.post("/attendance/fetchData", {
+                teamName: team,
+                batchYear: Number(batch),
+                centerName: centerName,
+            });
+            set({ userDetailsForAttendance: res.data.students });
         } catch (error) {
-            console.error("Error fetching attendance data:", error);
+            console.error("Error fetching attendance data:", error.response?.data || error.message);
         }
-    }
+    },
 }));

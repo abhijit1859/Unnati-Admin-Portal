@@ -1,12 +1,15 @@
-import axios from "axios"
-import {create} from "zustand"
+import { create } from "zustand";
+import api from "../lib/axios";  
 
 export const useLeadInfoStore = create((set) => ({
     leadInfo: [],
+
     getLeadInfo: async () => {
-        const details = await axios.get("http://localhost:8000/api/v1/lead/lead-info", { withCredentials: true });
-        
-        set({leadInfo:details.data})
+        try {
+            const details = await api.get("/lead/lead-info"); // 👈 cleaner, no hardcoding
+            set({ leadInfo: details.data });
+        } catch (error) {
+            console.error("Failed to fetch lead info:", error.response?.data || error.message);
+        }
     },
-    
-}))
+}));

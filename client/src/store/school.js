@@ -1,20 +1,32 @@
 import { create } from "zustand";
-import axios from 'axios'
+import api from "../lib/axios"; 
 export const useCenterStore = create((set) => ({
-    
-    addCenter: async(schoolName,location,team)=> {
-        const details = await axios.post("http://localhost:8000/api/v1/center/add-center", { schoolName, location, team }, { withCredentials: true })
-        console.log(details.data)
+    list: [],
+
+    addCenter: async (schoolName, location, team) => {
+        try {
+            const res = await api.post("/center/add-center", { schoolName, location, team });
+            console.log(res.data);
+        } catch (error) {
+            console.error("Failed to add center:", error.response?.data || error.message);
+        }
     },
+
     centerList: async () => {
-        const details = await axios.get("http://localhost:8000/api/v1/center/display-center", { withCredentials: true })
-         
-        set({list:details.data.centers})
+        try {
+            const res = await api.get("/center/display-center");
+            set({ list: res.data.centers });
+        } catch (error) {
+            console.error("Failed to fetch centers:", error.response?.data || error.message);
+        }
     },
+
     deleteCenter: async (id) => {
-        const details = await axios.post("http://localhost:8000/api/v1/center/delete-center", { id:id },
-            {withCredentials:true}
-        )
-        console.log(details.data)
-    }
-}))
+        try {
+            const res = await api.post("/center/delete-center", { id });
+            console.log(res.data);
+        } catch (error) {
+            console.error("Failed to delete center:", error.response?.data || error.message);
+        }
+    },
+}));

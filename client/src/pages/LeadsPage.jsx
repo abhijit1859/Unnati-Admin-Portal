@@ -3,10 +3,12 @@ import { useLeadInfoStore } from '../store/lead';
 import { useEffect } from 'react';
 import axios from 'axios';
 import { useState } from 'react';
-import { ColumnsSettingsIcon } from 'lucide-react';
+import { ColumnsSettingsIcon, LogOut } from 'lucide-react';
 import toast from 'react-hot-toast';
 import { useNavigate } from 'react-router-dom';
 import { usehandleTeam } from '../store/handleTeam';
+import { useCenterStore } from '../store/school';
+import { Logout } from '../components/Logout';
 
 export const LeadsPage = () => {
   const { getLeadInfo, leadInfo } = useLeadInfoStore()
@@ -14,7 +16,9 @@ export const LeadsPage = () => {
   const [schoolInfo, setSchoolInfo] = useState([])
   const [school, setSchool] = useState("");
   const [user, setUser] = useState("")
-  const navigate = useNavigate()
+  const navigate = useNavigate() 
+
+  const {centerList,list} = useCenterStore()
 
 
   useEffect(() => { getLeadInfo() }, [])
@@ -28,12 +32,9 @@ export const LeadsPage = () => {
        "http://localhost:8000/api/v1/lead/team-info",
        { withCredentials: true }
      );
-      const schoolRes = await axios.get(
-        "http://localhost:8000/api/v1/center/display-center",
-        {withCredentials:true}
-      );
+     
       setTeamInfo(res.data.members)
-      setSchoolInfo(schoolRes.data.centers);
+ 
     } catch (error) {
       console.log(error)
       
@@ -78,6 +79,7 @@ export const LeadsPage = () => {
   useEffect(() => {
     getJoinRequest();
     getUserData();
+    centerList()
   }, []);
   console.log(requests);
   console.log(team);
@@ -87,21 +89,23 @@ export const LeadsPage = () => {
  
 
 
+  console.log("list : " , list)
   
-  console.log(user,school)
  
   return (
     <>
+     
       <div className="p-8 bg-gray-50 min-h-screen space-y-10">
-    
-        <div className="text-center">
-          <h1 className="text-4xl font-bold text-gray-800 mb-2">
-            Team Management
-          </h1>
-          <p className="text-gray-500">Welcome back {leadInfo?.user?.name}</p>
+        <div className="flex justify-between items-center">
+          <div className="text-center md:text-left">
+            <h1 className="text-4xl font-bold text-gray-800 mb-1">
+              Team Management
+            </h1>
+            <p className="text-gray-500">Welcome back {leadInfo?.user?.name}</p>
+          </div>
+          <Logout/>
         </div>
 
- 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Add Member */}
           <div className="bg-white border border-gray-200 shadow-md rounded-xl p-6 space-y-5">
@@ -131,7 +135,7 @@ export const LeadsPage = () => {
               </button>
             </form>
           </div>
-     
+
           <div className="bg-white border border-gray-200 shadow-md rounded-xl p-6 flex flex-col justify-between">
             <div>
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">
@@ -158,11 +162,9 @@ export const LeadsPage = () => {
           </div>
         </div>
 
- 
         <div className="bg-white border border-gray-200 shadow-md rounded-xl p-6 space-y-4">
           <h1 className="text-xl font-semibold">Assign School to User</h1>
           <div className="flex flex-col md:flex-row gap-4">
-      
             <select
               className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               defaultValue=""
@@ -187,7 +189,7 @@ export const LeadsPage = () => {
               <option value="" disabled>
                 Select School
               </option>
-              {schoolInfo.map((school) => (
+              {list.map((school) => (
                 <option key={school._id} value={school.schoolName}>
                   {school.schoolName}, {school.location}
                 </option>
@@ -233,7 +235,6 @@ export const LeadsPage = () => {
         </div>
 
         {/* Pending Requests */}
-        
       </div>
     </>
   );

@@ -14,6 +14,8 @@ import { AttendancePage } from "./pages/AttendancePage";
  import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LeadsPage } from "./pages/LeadsPage";
 import { AddSchoolPage } from "./pages/AddSchoolPage";
+import { SideTeam } from "../../server/models/sideTeam.model";
+import { SideTeamPage } from "./pages/SideTeamPage";
 
 function App() {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
@@ -82,6 +84,8 @@ function App() {
           }
         />
 
+
+
         <Route
           path="/manage"
           element={
@@ -110,6 +114,8 @@ function App() {
         />
 
         <Route path="*" element={<div>404 Page Not Found</div>} />
+        <Route path="/side-team" element={<SideTeamPage/> } />
+               
       </Routes>
       <Toaster />
     </>

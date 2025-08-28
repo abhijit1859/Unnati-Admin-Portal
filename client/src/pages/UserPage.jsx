@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useAuthStore } from "../store/authStore";
 import { usehandleTeam } from "../store/handleTeam";
-import { User } from "lucide-react";
+import { User, Users } from "lucide-react";
 import { Navigate, useNavigate } from "react-router-dom";
+import { useSideTeamStore } from "../store/sideTeam";
+import { Logout } from "../components/Logout";
 
 export const UserPage = () => {
   const [teamName, setTeamName] = useState("");
@@ -13,10 +15,12 @@ export const UserPage = () => {
   const { requestTojoinTeam, userDetails } = usehandleTeam();
   const [data, setData] = useState([]);
 
-  const handleRequest = async () => {
+  const { fetchTeam ,teamInfo} = useSideTeamStore();
+
+  const handleRequest = async (teamType) => {
     setIsLoading(true);
     try {
-      await requestTojoinTeam({ teamName });
+      await requestTojoinTeam({ teamName:teamName,teamType:teamType });
       setIsRequested(true);
     } catch (error) {
       console.log(error);
@@ -31,24 +35,22 @@ export const UserPage = () => {
       const info = await userDetails(id);
       setData(info);
       console.log("Details:", info);
+      await fetchTeam()
     };
     fetch();
+   
   }, []);
   const navigate = useNavigate()
    
   return (
     <div className="w-full min-h-screen p-3">
       <h1 className="text-3xl font-bold m-4">Member Dashboard</h1>
-      <p className="m-4">Track all your teams</p>
-      <button
-        onClick={async () => {
-          await logoutUser();
-          navigate("/register", { replace: true });
-        }}
-      >
-        Logout
-      </button>
+      <div className="flex  justify-between items-center">
+        <p className="m-4">Track all your teams</p>
+        <Logout/>
+      </div>
 
+      
       <div className="flex items-stretch gap-4 m-4">
         <div className="w-[40%] flex flex-col gap-4">
           {/* Profile Box */}
@@ -74,7 +76,7 @@ export const UserPage = () => {
           {/* Current Teams Box */}
           <div className="border border-gray-300 rounded-lg p-6 space-y-6 shadow-sm bg-white flex-1">
             <div className="flex items-center gap-2 text-xl font-semibold border-b pb-2">
-              <User className="w-5 h-5" />
+              <Users className="w-5 h-5" />
               <span>Current Team</span>
             </div>
             <div>
@@ -114,7 +116,7 @@ export const UserPage = () => {
               </select>
 
               <button
-                onClick={handleRequest}
+                onClick={() => handleRequest("MainTeam")}
                 disabled={requested || loading || !teamName}
                 className={`px-4 py-2 text-white font-medium rounded-md w-full transition-all duration-200 ${
                   requested || loading
@@ -138,23 +140,18 @@ export const UserPage = () => {
               <select
                 className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
                 defaultValue=""
+                onChange={(e) => setTeamName(e.target.value)}
               >
                 <option value="" disabled>
                   Select a department
                 </option>
-                <option value="Technical">Technical</option>
-                <option value="PR & Fundraising">PR & Fundraising</option>
-                <option value="Design">Design</option>
-                <option value="Video Editing">Video Editing</option>
-                <option value="Content">Content</option>
-                <option value="Finance">Finance</option>
-                <option value="Membership and Coordinations">
-                  Membership and Coordinations
-                </option>
-                <option value="Social Media">Social Media</option>
+
+                {teamInfo.map((team) => (
+                  <option value={team.name}>{team.name}</option>
+                ))}
               </select>
               <button
-                 
+                onClick={() => handleRequest("SideTeam")}
                 className={`px-4 py-2 text-white font-medium rounded-md w-full transition-all duration-200 ${
                   requested || loading
                     ? "bg-gray-400 cursor-not-allowed"
