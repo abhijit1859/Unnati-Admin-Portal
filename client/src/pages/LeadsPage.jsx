@@ -94,8 +94,7 @@ export const LeadsPage = () => {
  
   return (
     <>
-     
-      <div className="p-8 bg-gray-50 min-h-screen space-y-10">
+      <div className="p-8 bg-[#FDFCFC] min-h-screen space-y-10">
         <div className="flex justify-between items-center">
           <div className="text-center md:text-left">
             <h1 className="text-4xl font-bold text-gray-800 mb-1">
@@ -103,12 +102,12 @@ export const LeadsPage = () => {
             </h1>
             <p className="text-gray-500">Welcome back {leadInfo?.user?.name}</p>
           </div>
-          <Logout/>
+          <Logout />
         </div>
 
         <div className="grid md:grid-cols-2 gap-8">
           {/* Add Member */}
-          <div className="bg-white border border-gray-200 shadow-md rounded-xl p-6 space-y-5">
+          <div className="bg-[#FEFAF5] border border-gray-200 shadow-md rounded-xl p-6 space-y-5">
             <h2 className="text-2xl font-semibold text-gray-800">
               Add New Member
             </h2>
@@ -124,19 +123,19 @@ export const LeadsPage = () => {
                   type="email"
                   id="email"
                   placeholder="Enter member's email"
-                  className="border border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  className="border bg-white border-gray-300 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
                 />
               </div>
               <button
                 type="submit"
-                className="bg-blue-600 text-white font-semibold px-4 py-2 rounded-md hover:bg-blue-700 transition-all duration-200 w-full"
+                className="bg-[#F0B56F] text-white font-semibold px-4 py-2 rounded-md hover:bg-[#F2A060] transition-all duration-200 w-full"
               >
                 Add Member
               </button>
             </form>
           </div>
 
-          <div className="bg-white border border-gray-200 shadow-md rounded-xl p-6 flex flex-col justify-between">
+          <div className="bg-[#FEFAF5] border border-gray-200 shadow-md rounded-xl p-6 flex flex-col justify-between">
             <div>
               <h2 className="text-2xl font-semibold text-gray-800 mb-6">
                 Team Overview
@@ -155,18 +154,18 @@ export const LeadsPage = () => {
             </div>
             <button
               onClick={() => navigate("/attendance")}
-              className="bg-blue-600 hover:bg-blue-700 text-white font-medium px-4 py-2 rounded-lg shadow-sm transition-colors duration-200 mt-6"
+              className="bg-[#F0B56F] hover:[#F2A060] text-white font-medium px-4 py-2 rounded-lg shadow-sm transition-colors duration-200 mt-6"
             >
               Mark Attendance
             </button>
           </div>
         </div>
 
-        <div className="bg-white border border-gray-200 shadow-md rounded-xl p-6 space-y-4">
+        <div className="bg-[#FEFAF5] border border-gray-200 shadow-md rounded-xl p-6 space-y-4">
           <h1 className="text-xl font-semibold">Assign School to User</h1>
           <div className="flex flex-col md:flex-row gap-4">
             <select
-              className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border bg-white border-gray-300 rounded-md px-3 py-2 w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               defaultValue=""
               onChange={(e) => setUser(e.target.value)}
             >
@@ -182,7 +181,7 @@ export const LeadsPage = () => {
 
             {/* School Select */}
             <select
-              className="border border-gray-300 rounded-md px-3 py-2 w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+              className="border bg-white border-gray-300 rounded-md px-3 py-2 w-full md:w-1/2 focus:outline-none focus:ring-2 focus:ring-blue-500"
               defaultValue=""
               onChange={(e) => setSchool(e.target.value)}
             >
@@ -205,7 +204,7 @@ export const LeadsPage = () => {
         </div>
 
         {/* Team Members */}
-        <div className="bg-white border border-gray-200 shadow-md rounded-xl p-6">
+        <div className="bg-[#FEFAF5] border border-gray-200 shadow-md rounded-xl p-6">
           <h2 className="text-2xl font-bold text-gray-800 mb-4">
             Team Members
           </h2>
@@ -214,7 +213,7 @@ export const LeadsPage = () => {
               {teamInfo.map((member) => (
                 <div
                   key={member._id}
-                  className="border border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200"
+                  className="border bg-white border-gray-200 rounded-lg p-4 shadow-sm hover:shadow-md transition-shadow duration-200"
                 >
                   <h3 className="text-lg font-semibold text-gray-800">
                     {member.name}

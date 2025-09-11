@@ -25,9 +25,14 @@ export const register = async (req, res) => {
             year
         });
 
+
         await newUser.save();
 
-        console.log(newUser);
+        const token = jwt.sign({ userId: newUser._id, email: newUser.email, role: newUser.role }, "sshh")
+        res.cookie('token', token, {
+            httpOnly: true,
+            maxAge: 7 * 24 * 60 * 60 * 1000
+        })
 
         res.status(201).json({
             success: true,

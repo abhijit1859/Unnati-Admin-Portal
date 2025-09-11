@@ -8,7 +8,7 @@ export const ProtectedRoute = ({ children, allowedRoles }) => {
 
   const userRole = authUser.role?.toUpperCase();
 
-  // If role is not in allowed list
+   
   if (allowedRoles && !allowedRoles.includes(userRole)) {
     if (userRole === "ADMIN") return <Navigate to="/admin" replace />;
     if (userRole === "LEAD") return <Navigate to="/lead" replace />;

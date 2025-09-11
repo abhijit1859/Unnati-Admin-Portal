@@ -1,10 +1,15 @@
-import { ShieldUser } from "lucide-react";
-import { Menu, X } from "lucide-react";
+import {
+  PanelLeft,
+  ShieldUser,
+  SquareChevronLeft,
+  SquareChevronRight,
+} from "lucide-react";
 import React, { useEffect, useState } from "react";
 import { usehandleTeam } from "../store/handleTeam";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 import { SideBar } from "../components/SideBar";
+import { Logout } from "../components/Logout";
 
 export const AdminPage = () => {
   const navigate = useNavigate();
@@ -16,8 +21,7 @@ export const AdminPage = () => {
   const [localRequests, setLocalRequests] = useState([]);
   const [activeTab, setActiveTab] = useState("MainTeam");
 
-  
-  const [isOpen, setIsOpen] = useState(true);
+  const [isOpen, setIsOpen] = useState(true); // sidebar open by default
 
   const getUserData = async () => {
     const data = await getAllDetails();
@@ -37,26 +41,32 @@ export const AdminPage = () => {
   const deny = () => toast("User request declined");
 
   return (
-    <div className="flex">
-      {/* Sidebar */}
+    <div className="flex h-screen">
       <SideBar isOpen={isOpen} />
 
-      {/* Main Content */}
-      <div className="flex-1 p-5">
-        <button
-          onClick={() => setIsOpen(!isOpen)}
-          className="mb-4 px-4 py-2 bg-blue-500 text-white rounded"
-        >
-          Toggle Sidebar
-        </button>
+      <div className="flex-1 bg-gray-50 p-5">
+        <div className="flex items-center justify-between">
+          <button
+            onClick={() => setIsOpen(!isOpen)}
+            className="mb-2 p-2   text-black bg-gray-200 rounded flex items-center gap-2"
+          >
+            {isOpen ? (
+              <SquareChevronLeft className="w-6 h-6" />
+            ) : (
+              <SquareChevronRight className="w-6 h-6" />
+            )}
+         
+          </button>
+          <Logout />
+        </div>
+
         <div className="flex items-center gap-3 p-5">
-          <ShieldUser className="w-10 h-10 text-green-500" />
+          <ShieldUser className="w-10 h-10 text-yellow-500" />
           <h1 className="text-4xl font-bold">Admin Dashboard</h1>
         </div>
 
-        <div className="flex gap-5 mt-5 items-center">
-          {/* Pending Requests */}
-          <div className="bg-white border border-gray-300 w-[50%] h-[500px] rounded-lg shadow-md p-4 flex flex-col overflow-y-auto">
+        <div className="flex gap-5 mt-5 items-start">
+          <div className="bg-[#FEFAF5] border border-gray-300 w-[50%] h-[500px] rounded-lg shadow-md p-4 flex flex-col overflow-y-auto">
             <div className="m-3">
               <h1 className="text-lg font-semibold">Pending Requests:</h1>
             </div>
@@ -80,7 +90,7 @@ export const AdminPage = () => {
                     : "bg-gray-200 text-black"
                 }`}
               >
-                Side Team Request
+                Side Team Requests
               </button>
             </div>
 
@@ -116,7 +126,6 @@ export const AdminPage = () => {
                               action: "accept",
                             });
                             approve();
-
                             setLocalRequests(
                               localRequests.filter((r) => r._id !== request._id)
                             );
@@ -132,7 +141,6 @@ export const AdminPage = () => {
                               action: "declined",
                             });
                             deny();
-
                             setLocalRequests(
                               localRequests.filter((r) => r._id !== request._id)
                             );
@@ -149,9 +157,9 @@ export const AdminPage = () => {
           </div>
 
           {/* Team Member Management */}
-          <div className="bg-white border border-gray-300 w-[50%] h-[500px] rounded-lg shadow-md p-4 flex flex-col overflow-y-auto">
+          <div className="bg-[#FEFAF5] border border-gray-300 w-[50%] h-[500px] rounded-lg shadow-md p-4 flex flex-col overflow-y-auto">
             <h1 className="text-2xl font-semibold p-4">
-              Team Member management
+              Team Member Management
             </h1>
             <select
               className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"

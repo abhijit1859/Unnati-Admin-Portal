@@ -83,8 +83,7 @@ function App() {
             </ProtectedRoute>
           }
         />
-
-
+        <Route path="/add" element={<AddSchoolPage/>} />
 
         <Route
           path="/manage"
@@ -99,7 +98,11 @@ function App() {
           path="/attendance"
           element={
             <ProtectedRoute allowedRoles={["ADMIN", "LEAD"]}>
-              <AttendancePage />
+              {authUser ? (
+                <AttendancePage role={authUser.role} />
+              ) : (
+                <div>Loading...</div>
+              )}
             </ProtectedRoute>
           }
         />
@@ -114,8 +117,15 @@ function App() {
         />
 
         <Route path="*" element={<div>404 Page Not Found</div>} />
-        <Route path="/side-team" element={<SideTeamPage/> } />
-               
+        <Route path="/side-team" element={
+          <ProtectedRoute allowedRoles={["ADMIN", "LEAD"]}>
+            {authUser ? (
+              <SideTeamPage role={authUser.role} />
+            ) : (
+                <div>loading...</div>
+            )}
+          </ProtectedRoute>
+        } />
       </Routes>
       <Toaster />
     </>
