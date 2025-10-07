@@ -14,7 +14,7 @@ import { AttendancePage } from "./pages/AttendancePage";
  import { ProtectedRoute } from "./components/ProtectedRoute";
 import { LeadsPage } from "./pages/LeadsPage";
 import { AddSchoolPage } from "./pages/AddSchoolPage";
-import { SideTeam } from "../../server/models/sideTeam.model";
+
 import { SideTeamPage } from "./pages/SideTeamPage";
 import AssignSchool from "./pages/AssignSchool";
 
