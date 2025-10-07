@@ -62,4 +62,9 @@ export const useAuthStore = create((set) => ({
             set({ isSigninUp: false });
         }
     },
+
+    changeRole:async({role,id})=>{
+        const res = await api.put("/team/change-role",{id,role},{withCredentials:true})
+        console.log(res);
+    }
 }));

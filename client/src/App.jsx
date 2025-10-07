@@ -16,6 +16,7 @@ import { LeadsPage } from "./pages/LeadsPage";
 import { AddSchoolPage } from "./pages/AddSchoolPage";
 import { SideTeam } from "../../server/models/sideTeam.model";
 import { SideTeamPage } from "./pages/SideTeamPage";
+import AssignSchool from "./pages/AssignSchool";
 
 function App() {
   const { authUser, isCheckingAuth, checkAuth } = useAuthStore();
@@ -107,6 +108,20 @@ function App() {
           }
         />
 
+       <Route
+  path="/add-school"
+  element={
+    <ProtectedRoute allowedRoles={["ADMIN", "LEAD"]}>
+      {authUser ? (
+        <AddSchoolPage role={authUser.role} />
+      ) : (
+        <div>Loading...</div>
+      )}
+    </ProtectedRoute>
+  }
+/>
+
+
         <Route
           path="/admin/edit-user/:id"
           element={
@@ -126,7 +141,14 @@ function App() {
             )}
           </ProtectedRoute>
         } />
+
+
+        <Route path="assign-team" element={<AssignSchool/>}/>
       </Routes>
+
+      
+        
+      
       <Toaster />
     </>
   );

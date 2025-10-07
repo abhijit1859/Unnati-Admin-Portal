@@ -1,5 +1,5 @@
 import React from "react";
-import { LayoutDashboard, CalendarCheck, User, ShieldUser } from "lucide-react";
+import { LayoutDashboard, CalendarCheck, User, ShieldUser, School } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 
 export const SideBar = ({ isOpen }) => {
@@ -49,6 +49,13 @@ export const SideBar = ({ isOpen }) => {
           >
             <User size={20} className="text-gray-700" />
             {isOpen && <span className="font-medium">Teams</span>}
+          </li>
+
+          <li onClick={()=>nav("/add-school")}
+             className="flex items-center gap-3 p-2 rounded-lg hover:bg-yellow-100 transition cursor-pointer"
+            >
+            <School size={20} className="text-gray-700"/>
+            {isOpen && <span className="font-medium">Add center</span>}
           </li>
         </ul>
       </div>

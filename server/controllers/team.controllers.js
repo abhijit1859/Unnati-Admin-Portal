@@ -348,3 +348,33 @@ export const getJoinReq = async (req, res) => {
         console.log(error)
     }
 }
+
+
+export const changeRole = async (req, res) => {
+  const { role, id } = req.body;
+
+  try {
+    const user = await User.findById(id);
+
+    if (!user) {
+      return res.status(400).json({
+        message: "User not found",
+      });
+    }
+
+  
+    await user.updateOne({ role: role });
+
+    
+
+    return res.status(200).json({
+      message: "Role updated successfully",
+      role: role,
+    });
+  } catch (error) {
+    console.error(error);
+    return res.status(500).json({
+      message: "Server error",
+    });
+  }
+};

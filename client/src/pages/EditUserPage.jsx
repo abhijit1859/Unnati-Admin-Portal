@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { usehandleTeam } from "../store/handleTeam";
-import { User as UserIcon ,Pencil} from "lucide-react";
+import { User as UserIcon, Pencil } from "lucide-react";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { useAuthStore } from "../store/authStore";
 
 export const EditUserPage = () => {
   const { id } = useParams();
@@ -11,38 +12,47 @@ export const EditUserPage = () => {
   const [data, setData] = useState(null);
   const [currTeam, setCurrTeamName] = useState("");
   const [isEditingTeam, setIsEditingTeam] = useState(false);
-  console.log(id)
+  const [isEditingRole, setIsEditingRole] = useState(false)
+  const [currRole,setCurrRole]=useState("")
+  const {changeRole} = useAuthStore()
 
 
   const navigate = useNavigate();
 
   const handleChangeTeam = async (selectedTeam) => {
-    console.log(id, selectedTeam);
+   
     const payload = await axios.put(
       "http://localhost:8000/api/v1/team/changeTeam",
       { id, teamName: selectedTeam },
       { withCredentials: true }
     );
-    
+
 
     toast(payload.data.message);
   };
+
+  const handleChangeRole = async (selectedRole)=>{
+     console.log(selectedRole)
+    const res = changeRole({id:id,role:selectedRole});
+    toast("Role changed successfully")
+   
+  }
 
   useEffect(() => {
     const fetchUser = async () => {
       const resData = await userDetails(id);
       console.log(resData)
       setData(resData);
-      setCurrTeamName(resData.team || "");  
+      setCurrTeamName(resData.team || "");
     };
     fetchUser();
-  }, [id, userDetails,currTeam]);
+  }, [id, userDetails, currTeam]);
 
   if (!data) return <div>Loading...</div>;
-  
+
 
   const { user } = data;
-  console.log(user)
+  console.log("user class-->",user)
 
   return (
     <div className="w-full min-h-screen p-3">
@@ -69,9 +79,42 @@ export const EditUserPage = () => {
             </div>
             <div>
               <p className="text-sm text-gray-500">Role</p>
-              <h3 className="text-base font-medium text-gray-800">
-                {user?.role}
-              </h3>
+              {!isEditingRole ? (<div className="flex justify-between">
+                <h3 className="text-base font-medium text-gray-800">
+                  {user?.role}
+
+                </h3>
+                <button
+                  onClick={() => setIsEditingRole(true)}
+                  className="text-gray-500 hover:text-blue-600 transition-colors"
+                  aria-label="Edit Team"
+                >
+                  <Pencil className="w-5 h-5" />
+                </button>
+              </div>
+              ) : (
+                <div>
+                 <select
+                    id="teamSelect"
+                    className="w-full p-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+                    value={currTeam}
+                    onChange={(e) => {
+                      const selectedRole = e.target.value;
+                      setCurrRole(selectedRole);
+                      setIsEditingRole(false);
+                      handleChangeRole(selectedRole)
+                    }}
+                  >
+                    <option value="" disabled>
+                      Select a Role
+                    </option>
+                    <option value="ADMIN">ADMIN</option>
+                    <option value="USER">USER</option>
+                   
+                  </select>
+                </div>
+              )}
+
             </div>
 
             <div>
@@ -87,7 +130,7 @@ export const EditUserPage = () => {
             </div>
             <div>
               <p>Classes: </p>
-              <h3>{user?.classes}</h3>
+              <h3>{user.classes || "N/A"}</h3>
             </div>
           </div>
 

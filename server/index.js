@@ -12,6 +12,8 @@ import userRoutes from './routes/user.routes.js';
 import leadRoutes from './routes/teamLead.routes.js';
 import centerRoutes from './routes/school.routes.js';
 import sideTeamRoutes from './routes/sideTeam.routes.js';
+import leaderBoardRoutes from './routes/leaderBoard.routes.js';
+import assignmentRoutes from './routes/teamAssignment.routes.js';
  
 dotenv.config();
 
@@ -32,6 +34,8 @@ app.use("/api/v1/attendance", attendanceRoute)
 app.use("/api/v1/lead", leadRoutes)
 app.use("/api/v1/center", centerRoutes)
 app.use("/api/v1/sideTeam", sideTeamRoutes)
+app.use("/api/v1/leader-board",leaderBoardRoutes)
+app.use("/api/v1/team-assignment",assignmentRoutes)
 
 connectDB();
 

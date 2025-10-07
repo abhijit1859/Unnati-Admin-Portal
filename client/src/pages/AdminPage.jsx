@@ -1,5 +1,4 @@
 import {
-  PanelLeft,
   ShieldUser,
   SquareChevronLeft,
   SquareChevronRight,
@@ -37,115 +36,110 @@ export const AdminPage = () => {
     setLocalRequests(requests);
   }, [requests]);
 
-  const approve = () => toast("User request accepted");
-  const deny = () => toast("User request declined");
+  const approve = () => toast.success("User request accepted");
+  const deny = () => toast.error("User request declined");
 
   return (
-    <div className="flex h-screen">
+    <div className="flex h-screen bg-gray-50">
       <SideBar isOpen={isOpen} />
 
-      <div className="flex-1 bg-gray-50 p-5">
-        <div className="flex items-center justify-between">
+      <div className="flex-1 p-6">
+        <div className="flex items-center justify-between mb-6">
           <button
             onClick={() => setIsOpen(!isOpen)}
-            className="mb-2 p-2   text-black bg-gray-200 rounded flex items-center gap-2"
+            className="p-2 bg-gray-200 rounded flex items-center gap-2"
           >
             {isOpen ? (
               <SquareChevronLeft className="w-6 h-6" />
             ) : (
               <SquareChevronRight className="w-6 h-6" />
             )}
-         
           </button>
           <Logout />
         </div>
 
-        <div className="flex items-center gap-3 p-5">
-          <ShieldUser className="w-10 h-10 text-yellow-500" />
-          <h1 className="text-4xl font-bold">Admin Dashboard</h1>
+        <div className="flex items-center gap-3 mb-6">
+          <ShieldUser className="w-10 h-10 text-green-500" />
+          <h1 className="text-4xl font-bold text-gray-900">Admin Dashboard</h1>
         </div>
 
-        <div className="flex gap-5 mt-5 items-start">
-          <div className="bg-[#FEFAF5] border border-gray-300 w-[50%] h-[500px] rounded-lg shadow-md p-4 flex flex-col overflow-y-auto">
-            <div className="m-3">
-              <h1 className="text-lg font-semibold">Pending Requests:</h1>
-            </div>
+        <div className="flex gap-6">
+          {/* Pending Requests */}
+          <div className="bg-[#FEFAF5] border border-gray-300 rounded-2xl shadow-md w-1/2 p-6 flex flex-col overflow-y-auto max-h-[500px]">
+            <h2 className="text-lg font-semibold mb-3">Pending Requests</h2>
 
-            <div className="flex bg-gray-200 rounded-lg my-4 p-1">
+            <div className="flex bg-gray-200 rounded-lg p-1 mb-4">
               <button
                 onClick={() => setActiveTab("MainTeam")}
-                className={`px-1 py-1 rounded-lg transition w-[50%] ${
+                className={`w-1/2 px-2 py-1 rounded-lg transition ${
                   activeTab === "MainTeam"
-                    ? "bg-white text-black"
-                    : "bg-gray-200 text-black"
+                    ? "bg-white text-gray-900"
+                    : "bg-gray-200 text-gray-800"
                 }`}
               >
-                Main Team Requests
+                Main Team
               </button>
               <button
                 onClick={() => setActiveTab("SideTeam")}
-                className={`px-1 py-1 rounded-lg transition w-[50%] ${
+                className={`w-1/2 px-2 py-1 rounded-lg transition ${
                   activeTab === "SideTeam"
-                    ? "bg-white text-black"
-                    : "bg-gray-200 text-black"
+                    ? "bg-white text-gray-900"
+                    : "bg-gray-200 text-gray-800"
                 }`}
               >
-                Side Team Requests
+                Side Team
               </button>
             </div>
 
-            <div className="flex flex-col gap-3 mt-3">
+            <div className="flex flex-col gap-3">
               {localRequests.filter(
-                (request) =>
-                  request.status === "pending" && request.teamType === activeTab
+                (req) =>
+                  req.status === "pending" && req.teamType === activeTab
               ).length === 0 ? (
-                <div className="text-center flex items-center justify-center text-gray-500">
-                  No pending requests...
-                </div>
+                <p className="text-center text-gray-500">No pending requests...</p>
               ) : (
                 localRequests
                   .filter(
-                    (request) =>
-                      request.status === "pending" &&
-                      request.teamType === activeTab
+                    (req) =>
+                      req.status === "pending" && req.teamType === activeTab
                   )
-                  .map((request) => (
+                  .map((req) => (
                     <div
-                      key={request._id}
-                      className="w-[80%] border border-gray-500 shadow-lg rounded-lg p-3"
+                      key={req._id}
+                      className="w-full border border-gray-300 rounded-2xl shadow-sm p-4"
                     >
-                      <h1 className="font-bold">{request.requester.name}</h1>
-                      <p>
-                        <strong>Programme:</strong> {request.team.name}
+                      <h3 className="font-semibold text-gray-900">{req.requester.name}</h3>
+                      <p className="text-gray-700">
+                        <strong>Programme:</strong> {req.team.name}
                       </p>
-                      <div className="flex items-center justify-center gap-3 m-3">
+                      <div className="flex gap-3 mt-3">
                         <button
                           onClick={() => {
                             handleJoinRequest({
-                              requestId: request._id,
+                              requestId: req._id,
                               action: "accept",
                             });
                             approve();
                             setLocalRequests(
-                              localRequests.filter((r) => r._id !== request._id)
+                              localRequests.filter((r) => r._id !== req._id)
                             );
                           }}
-                          className="w-[50%] bg-green-400 p-1 rounded-lg cursor-pointer"
+                          className="flex-1 bg-green-500 text-white py-2 rounded-xl hover:bg-green-600 transition"
                         >
                           Approve
                         </button>
                         <button
                           onClick={() => {
                             handleJoinRequest({
-                              requestId: request._id,
+                              requestId: req._id,
                               action: "declined",
                             });
                             deny();
                             setLocalRequests(
-                              localRequests.filter((r) => r._id !== request._id)
+                              localRequests.filter((r) => r._id !== req._id)
                             );
                           }}
-                          className="w-[50%] bg-red-400 p-1 rounded-lg cursor-pointer"
+                          className="flex-1 bg-red-500 text-white py-2 rounded-xl hover:bg-red-600 transition"
                         >
                           Reject
                         </button>
@@ -157,12 +151,10 @@ export const AdminPage = () => {
           </div>
 
           {/* Team Member Management */}
-          <div className="bg-[#FEFAF5] border border-gray-300 w-[50%] h-[500px] rounded-lg shadow-md p-4 flex flex-col overflow-y-auto">
-            <h1 className="text-2xl font-semibold p-4">
-              Team Member Management
-            </h1>
+          <div className="bg-[#FEFAF5] border border-gray-300 rounded-2xl shadow-md w-1/2 p-6 flex flex-col overflow-y-auto max-h-[500px]">
+            <h2 className="text-2xl font-semibold mb-4">Team Member Management</h2>
             <select
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-green-500"
+              className="w-full p-3 border border-gray-300 rounded-xl focus:outline-none focus:ring-2 focus:ring-green-500 mb-4"
               defaultValue=""
               onChange={(e) => setTeam(e.target.value)}
             >
@@ -173,25 +165,26 @@ export const AdminPage = () => {
               <option value="Netritva">Netritva</option>
               <option value="Akshar">Akshar</option>
             </select>
-            <div className="mt-4">
+
+            <div className="flex flex-col gap-3">
               {userData
                 ?.filter((t) => t.name === team)
                 ?.flatMap((t) => t.members)
                 ?.map((member) => (
                   <div
                     key={member._id}
-                    className="p-3 border rounded-md shadow-sm bg-gray-100 my-2 flex justify-between items-center"
+                    className="flex justify-between items-center p-4 bg-white rounded-xl shadow-sm"
                   >
                     <div>
-                      <p className="font-medium">{member.name}</p>
+                      <p className="font-medium text-gray-900">{member.name}</p>
                       <p className="text-sm text-gray-600">{member.email}</p>
                       <p className="text-sm text-gray-600">{member.role}</p>
                     </div>
                     <button
                       onClick={() => navigate(`/admin/edit-user/${member._id}`)}
-                      className="px-3 py-1 bg-green-400 text-white rounded hover:bg-green-900"
+                      className="px-4 py-2 bg-green-500 text-white rounded-xl hover:bg-green-600 transition"
                     >
-                      Edit User
+                      Edit
                     </button>
                   </div>
                 ))}

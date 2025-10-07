@@ -1,6 +1,6 @@
 import express from 'express'
 import { authMiddleware } from '../middlewares/auth.middlewares.js'
-import { addSideTeam, changeMainTeam,  getJoinReq,  getJoinRequests, getTeamInfo, handleJoinRequest, joinSideTeam, joinTeam,  requestToJoinTeam  } from '../controllers/team.controllers.js'
+import { addSideTeam, changeMainTeam,  changeRole,  getJoinReq,  getJoinRequests, getTeamInfo, handleJoinRequest, joinSideTeam, joinTeam,  requestToJoinTeam  } from '../controllers/team.controllers.js'
 import { getDetailsByTeamName } from '../controllers/user.controllers.js'
  
 const teamRoutes = express.Router()
@@ -19,6 +19,7 @@ teamRoutes.get('/getAllDetails', authMiddleware, getDetailsByTeamName)
  
 
 teamRoutes.put("/changeTeam", authMiddleware, changeMainTeam)
+teamRoutes.put("/change-role",authMiddleware,changeRole)
 
 teamRoutes.post("/team-info",authMiddleware,getTeamInfo)
 
