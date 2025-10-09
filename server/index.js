@@ -18,11 +18,26 @@ import assignmentRoutes from './routes/teamAssignment.routes.js';
 dotenv.config();
 
 const app = express();
+app.set('trust proxy', 1);
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
-    origin: ["http://10.16.4.108:5173" , "http://localhost:5173","https://unnati-frontend.vercel.app/"],
-
+    origin: [
+        "http://10.16.4.108:5173",
+        "http://localhost:5173",
+        "https://unnati-frontend.vercel.app"
+    ],
+    methods: ["GET","POST","PUT","PATCH","DELETE","OPTIONS"],
+    allowedHeaders: ["Content-Type","Authorization"],
+    credentials: true
+}));
+// Handle preflight
+app.options('*', cors({
+    origin: [
+        "http://10.16.4.108:5173",
+        "http://localhost:5173",
+        "https://unnati-frontend.vercel.app"
+    ],
     credentials: true
 }));
 
@@ -41,6 +56,6 @@ connectDB();
 
  
 const PORT = process.env.PORT || 8000;
-app.listen(8000, () => {
+app.listen(PORT, () => {
     console.log(`server is up and running on 0.0.0.0:${PORT}`);
 });
