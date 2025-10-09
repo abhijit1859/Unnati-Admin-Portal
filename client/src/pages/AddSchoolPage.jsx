@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import api from "../lib/axios";
 import { School, SquareChevronLeft, SquareChevronRight } from "lucide-react";
 import { SideBar } from "../components/SideBar";
 
@@ -12,9 +12,8 @@ export const AddSchoolPage = ({ role }) => {
 
   const displaySchool = async () => {
     try {
-      const details = await axios.get(
-        "http://localhost:8000/api/v1/center/display-center",
-        { withCredentials: true }
+      const details = await api.get(
+        "/center/display-center"
       );
       setList(details.data.centers || []);
     } catch (err) {
@@ -28,10 +27,9 @@ export const AddSchoolPage = ({ role }) => {
 
   const handleOnAddSchool = async () => {
     try {
-      const details = await axios.post(
-        "http://localhost:8000/api/v1/center/add-center",
-        { schoolName, location, team },
-        { withCredentials: true }
+      const details = await api.post(
+        "/center/add-center",
+        { schoolName, location, team }
       );
       setList((prev) => [...prev, details.data.school]);
       setSchoolName("");
@@ -44,10 +42,9 @@ export const AddSchoolPage = ({ role }) => {
 
   const handleOnDelete = async (id) => {
     try {
-      await axios.post(
-        "http://localhost:8000/api/v1/center/delete-center",
-        { id },
-        { withCredentials: true }
+      await api.post(
+        "/center/delete-center",
+        { id }
       );
       setList((prev) => prev.filter((school) => school._id !== id));
     } catch (err) {

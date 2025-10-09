@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import { usehandleTeam } from "../store/handleTeam";
 import { User as UserIcon, Pencil } from "lucide-react";
-import axios from "axios";
+import api from "../lib/axios";
 import toast from "react-hot-toast";
 import { useAuthStore } from "../store/authStore";
 
@@ -21,10 +21,9 @@ export const EditUserPage = () => {
 
   const handleChangeTeam = async (selectedTeam) => {
    
-    const payload = await axios.put(
-      "http://localhost:8000/api/v1/team/changeTeam",
-      { id, teamName: selectedTeam },
-      { withCredentials: true }
+    const payload = await api.put(
+      "/team/changeTeam",
+      { id, teamName: selectedTeam }
     );
 
 

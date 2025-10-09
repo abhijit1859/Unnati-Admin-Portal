@@ -1,7 +1,7 @@
 import { Users, Send, Loader, PanelLeft,SquareChevronLeft,SquareChevronRight } from "lucide-react";
 import React, { useState, useEffect } from "react";
 import { useAttendanceStore } from "../store/attendance";
-import axios from "axios";
+import api from "../lib/axios";
 import toast from "react-hot-toast";
 import { useCenterStore } from "../store/school";
 import { SideBar } from "../components/SideBar";
@@ -47,15 +47,14 @@ export const AttendancePage = ({role}) => {
 
     setLoading(true);
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/attendance/mark",
+      const res = await api.post(
+        "/attendance/mark",
         {
           teamName,
           userIds: selectedUserIds,
           inTime,
           outTime,
-        },
-        { withCredentials: true }
+        }
       );
 
       toast.success(res.data.message);

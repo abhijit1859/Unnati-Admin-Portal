@@ -1,7 +1,7 @@
 import React from 'react'
 import { useLeadInfoStore } from '../store/lead';
 import { useEffect } from 'react';
-import axios from 'axios';
+import api from '../lib/axios';
 import { useState } from 'react';
 import { ColumnsSettingsIcon, LogOut } from 'lucide-react';
 import toast from 'react-hot-toast';
@@ -28,9 +28,8 @@ export const LeadsPage = () => {
   
   const getMembersList = async () => {
     try {
-     const res = await axios.get(
-       "http://localhost:8000/api/v1/lead/team-info",
-       { withCredentials: true }
+     const res = await api.get(
+       "/lead/team-info"
      );
      
       setTeamInfo(res.data.members)
@@ -47,10 +46,9 @@ export const LeadsPage = () => {
 
   const assignSchool = async () => {
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/center/assign-center",
-        { userId: user, centerName: school },
-        { withCredentials: true }
+      const res = await api.post(
+        "/center/assign-center",
+        { userId: user, centerName: school }
       );
       toast(res.data)
       

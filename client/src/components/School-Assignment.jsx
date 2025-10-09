@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useCenterStore } from '../store/school';
-import axios from 'axios';
+import api from '../lib/axios';
 
 const SchoolAssignment = () => {
   const { centerList, list } = useCenterStore();
@@ -36,10 +36,9 @@ const SchoolAssignment = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/team-assignment/load-members",
-        { teamName, year: batch },
-        { withCredentials: true }
+      const res = await api.post(
+        "/team-assignment/load-members",
+        { teamName, year: batch }
       );
       setMembers(res.data.members || []);
       setSelectedMembers([]);
@@ -70,15 +69,14 @@ const SchoolAssignment = () => {
     setLoading(true);
     setError("");
     try {
-      const res = await axios.post(
-        "http://localhost:8000/api/v1/team-assignment/create",
+      const res = await api.post(
+        "/team-assignment/create",
         {
           teamName,
           batch,
           schoolName: selectedSchool,
           userIds: selectedMembers,
-        },
-        { withCredentials: true }
+        }
       );
       console.log(res.data);
       alert("Members assigned successfully!");
