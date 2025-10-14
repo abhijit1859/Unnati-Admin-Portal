@@ -41,6 +41,8 @@ app.options('*', cors({
     credentials: true
 }));
 
+console.log("hello")
+
  
 app.use("/api/v1/auth", authRoutes)
 app.use("/api/v1/team", teamRoutes)
