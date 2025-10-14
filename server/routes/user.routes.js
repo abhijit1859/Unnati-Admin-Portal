@@ -7,7 +7,7 @@ const userRoutes = express.Router()
 
 userRoutes.post("/send",authMiddleware, sendUserDetails);
 userRoutes.post("/remove", authMiddleware, removeFromMainTeam)
-userRoutes.delete('/deleteUser/:id', authMiddleware, deleteUser)
+userRoutes.delete('/deleteUser/:userId', authMiddleware, deleteUser)
 
 
 
